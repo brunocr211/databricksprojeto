@@ -54,5 +54,3 @@ az login
             trip_data_3.zip
             ...
     ```
-
-Traduzido com a versão gratuita do tradutor - DeepL.com
