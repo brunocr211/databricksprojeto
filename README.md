@@ -54,3 +54,75 @@ az login
             trip_data_3.zip
             ...
     ```
+5. Abra um navegador da Web e acesse https://www.zillow.com/howto/api/neighborhood-boundaries.htm. 
+
+6. Clique em **New York Neighborhood Boundaries** (Limites dos bairros de Nova York) para baixar o arquivo.
+
+7. Copie o arquivo **ZillowNeighborhoods-NY.zip** do diretório **downloads** do seu navegador para o diretório `DataFile`.
+
+### Implante os recursos do Azure
+
+1. Em um shell ou no Prompt de Comando do Windows, execute o comando a seguir e siga as instruções de login:
+
+```bash
+    az login
+    ```
+
+2. Navegue até a pasta chamada `azure` no repositório GitHub:
+
+```bash
+    cd azure
+    ```
+
+3. Execute os seguintes comandos para implantar os recursos do Azure:
+
+```bash
+    export resourceGroup=‘[Nome do grupo de recursos]’
+    export resourceLocation=‘[Região]’
+    export eventHubNamespace=‘[Nome do namespace do Event Hubs]’
+    export databricksWorkspaceName=‘[Nome do espaço de trabalho do Azure Databricks]’
+    export cosmosDatabaseAccount='[Nome do banco de dados do Cosmos DB]'
+    export logAnalyticsWorkspaceName=‘[Nome do espaço de trabalho do Log Analytics]’
+    export logAnalyticsWorkspaceRegion=‘[Região do Log Analytics]’
+
+    # Crie um grupo de recursos
+    az group create --name $resourceGroup --location $resourceLocation
+
+    # Implante recursos
+    az group deployment create --resource-group $resourceGroup \
+        --template-file deployresources.json --parameters \
+        eventHubNamespace=$eventHubNamespace \
+        databricksWorkspaceName=$databricksWorkspaceName \
+        cosmosDatabaseAccount=$cosmosDatabaseAccount \
+	    logAnalyticsWorkspaceName=$logAnalyticsWorkspaceName \
+        logAnalyticsWorkspaceRegion=$logAnalyticsWorkspaceRegion
+    ```
+
+4. A saída da implantação é gravada no console após a conclusão. Pesquise a seguinte JSON na saída:
+
+```JSON
+“outputs”: {
+        “cosmosDb”: {
+          “type”: “Object”,
+          “value”: {
+            “hostName”: <value>,
+            “secret”: <value>,
+            “username”: <value>
+          }
+        },
+        “eventHubs”: {
+          “type”: “Object”,
+          “value”: {
+            “taxi-fare-eh”: <valor>,
+            “taxi-ride-eh”: <valor>
+          }
+        },
+        “logAnalytics”: {
+          “tipo”: “Objeto”,
+          “valor”: {
+            “segredo”: <valor>,
+            “workspaceId”: <valor>
+          }
+        }
+},
+```
