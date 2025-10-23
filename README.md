@@ -229,7 +229,7 @@ Para esta seção, você precisa do ID da área de trabalho do Log Analytics e d
     databricks fs cp --overwrite metrics.properties dbfs:/azure-databricks-job/metrics.properties
     ```
 
-3. Se você ainda não decidiu um nome para o seu cluster Databricks, selecione um agora. Você inserirá o nome abaixo no caminho do sistema de arquivos Databricks para o seu cluster. Copie o script de inicialização de `\azure\azure-databricks-monitoring\scripts\spark.metrics` para o sistema de arquivos Databricks inserindo o seguinte comando:
+3. Se você ainda não decidiu um nome para o seu cluster Databricks, selecione um agora. Você inserirá o nome abaixo no caminho do sistema de arquivos Databricks para o seu cluster. Copie o script de inicialização de `\azure\azure-databricks-monitoring\scripts\spark.metrics` para o sistema de arquivos Databricks inserindo o seguinte comando
 ```
     databricks fs cp --overwrite spark-metrics.sh dbfs:/databricks/init/<cluster-name>/spark-metrics.sh
     ```
