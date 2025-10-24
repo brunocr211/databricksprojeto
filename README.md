@@ -235,3 +235,91 @@ Para esta seção, você precisa do ID da área de trabalho do Log Analytics e d
     ```
 
 ### Crie um cluster Databricks
+1. No espaço de trabalho do Databricks, clique em “Clusters” e, em seguida, clique em “criar cluster”. Digite o nome do cluster que você criou na etapa 3 da seção **configurar registro personalizado para a tarefa do Databricks** acima.
+
+2. Selecione um modo de cluster **padrão**.
+
+3. Defina a **versão de tempo de execução do Databricks** como **4.3 (inclui Apache Spark 2.3.1, Scala 2.11)**
+
+4. Defina a **versão do Python** como **2**.
+
+5. Defina **Tipo de driver** como **O mesmo que o trabalhador**
+
+6. Defina **Tipo de trabalhador** como **Standard_DS3_v2**.
+
+7. Defina **Mínimo de trabalhadores** como **2**.
+
+8. Desmarque **Habilitar autoescala**. 
+
+9. Abaixo da caixa de diálogo **Encerramento automático**, clique em **Scripts de inicialização**. 
+
+10. Digite **dbfs:/databricks/init/<cluster-name>/spark-metrics.sh**, substituindo o nome do cluster criado na etapa 1 por <cluster-name>.
+
+11. Clique no botão **Adicionar**.
+
+12. Clique no botão **Criar cluster**.
+
+### Criar uma tarefa no Databricks
+
+1. Na área de trabalho do Databricks, clique em “Tarefas” e “Criar tarefa”.
+
+2. Digite um nome para a tarefa.
+
+3. Clique em “definir jar” para abrir a caixa de diálogo “Carregar JAR para executar”.
+
+4. Arraste o arquivo **azure-databricks-job-1.0-SNAPSHOT.jar** criado na seção **compilar o .jar para a tarefa do Databricks** para a caixa **Solte o JAR aqui para carregar**.
+
+5. Insira **com.microsoft.pnp.TaxiCabReader** no campo **Main Class**.
+
+``` -n jar:file:/dbfs/azure-databricks-jobs/ZillowNeighborhoods-NY.zip!/ZillowNeighborhoods-NY.shp --taxi-ride-consumer-group taxi-ride-eh-cg --taxi-fare-consumer-group taxi-fare-eh-cg --window-
+
+6. No campo argumentos, insira o seguinte:
+```shell
+-n jar:file:/dbfs/azure-databricks-jobs/ZillowNeighborhoods-NY.zip!/ ZillowNeighborhoods-NY.shp --taxi-ride-consumer-group taxi-ride-eh-cg --taxi-fare-consumer-group taxi-fare-eh-cg --window-interval “1 minute” --cassandra-host <nome do host Cassandra do Cosmos DB acima>
+7. Instale as bibliotecas dependentes seguindo estas etapas:
+    
+    1. Na interface do usuário do Databricks, clique no botão **home**.
+    
+    2. No menu suspenso **Usuários**, clique no nome da sua conta de usuário para abrir as configurações da área de trabalho da sua conta.
+    
+    3. Clique na seta do menu suspenso ao lado do nome da sua conta, clique em **criar** e clique em **Biblioteca** para abrir a caixa de diálogo **Nova biblioteca**.
+    
+    4. No controle suspenso **Fonte**, selecione **Coordenada Maven**.
+    
+    5. Sob o título **Instalar artefatos Maven**, digite `com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.5` na caixa de texto **Coordenada**. 
+    
+    6. Clique em **Criar biblioteca** para abrir a janela **Artefatos**.
+    
+    7. Em **Status em clusters em execução**, marque a caixa de seleção **Anexar automaticamente a todos os clusters**.
+    
+    8. Repita as etapas 1 a 7 para a coordenada Maven `com.microsoft.azure.cosmosdb:azure-cosmos-cassandra-spark-helper:1.0.0`.
+    
+    9. Repita as etapas 1 a 6 para a coordenada Maven `org.geotools:gt-shapefile:19.2`.
+    
+    10. Clique em **Opções avançadas**.
+    
+    11. Digite `http://download.osgeo.org/webdav/geotools/` na caixa de texto **Repositório**. 
+    
+    12. Clique em **Criar biblioteca** para abrir a janela **Artefatos**. 
+    
+    13. Em **Status em clusters em execução**, marque a caixa de seleção **Anexar automaticamente a todos os clusters**.
+
+8. Adicione as bibliotecas dependentes adicionadas na etapa 7 ao trabalho criado no final da etapa 6:
+ 
+   1. No espaço de trabalho do Azure Databricks, clique em **Jobs**.
+
+2. Clique no nome do trabalho criado na etapa 2 da seção **criar um trabalho do Databricks**. 
+
+3. Ao lado da seção **Bibliotecas dependentes**, clique em **Adicionar** para abrir a caixa de diálogo **Adicionar biblioteca dependente**. 
+    
+    4. Em **Biblioteca de**, selecione **Área de trabalho**.
+    
+    5. Clique em **usuários**, depois em seu nome de usuário e, em seguida, clique em `azure-eventhubs-spark_2.11:2.3.5`. 
+    
+    6. Clique em **OK**.
+    
+    7. Repita as etapas 1 a 6 para `spark-cassandra-connector_2.11:2.3.1` e `gt-shapefile:19.2`.
+
+9. Ao lado de **Cluster:**, clique em **Editar**. Isso abre a caixa de diálogo **Configurar cluster**. No menu suspenso **Cluster Type**, selecione **Existing Cluster**. No menu suspenso **Select Cluster**, selecione o cluster criado na seção **criar um cluster Databricks**. Clique em **confirm**.
+
+10. Clique em **run now**.
