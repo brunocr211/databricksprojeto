@@ -308,7 +308,7 @@ Para esta seção, você precisa do ID da área de trabalho do Log Analytics e d
  
    1. No espaço de trabalho do Azure Databricks, clique em **Jobs**.
 
-2. Clique no nome do trabalho criado na etapa 2 da seção **criar um trabalho do Databricks**. 
+2. Clique no nome do trabalho criado na etapa 2 da seção **criar um trabalho do Databricks**
 
 3. Ao lado da seção **Bibliotecas dependentes**, clique em **Adicionar** para abrir a caixa de diálogo **Adicionar biblioteca dependente**. 
     
