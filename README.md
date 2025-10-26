@@ -269,7 +269,7 @@ Para esta seção, você precisa do ID da área de trabalho do Log Analytics e d
 
 4. Arraste o arquivo **azure-databricks-job-1.0-SNAPSHOT.jar** criado na seção **compilar o .jar para a tarefa do Databricks** para a caixa **Solte o JAR aqui para carregar**.
 
-5. Insira **com.microsoft.pnp.TaxiCabReader** no campo **Main Class**.
+5. Insira **com.microsoft.pnp.TaxiCabReader** no campo **Main Class**
 
 ``` -n jar:file:/dbfs/azure-databricks-jobs/ZillowNeighborhoods-NY.zip!/ZillowNeighborhoods-NY.shp --taxi-ride-consumer-group taxi-ride-eh-cg --taxi-fare-consumer-group taxi-fare-eh-cg --window-
 
