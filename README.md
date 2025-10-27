@@ -323,3 +323,50 @@ Para esta seção, você precisa do ID da área de trabalho do Log Analytics e d
 9. Ao lado de **Cluster:**, clique em **Editar**. Isso abre a caixa de diálogo **Configurar cluster**. No menu suspenso **Cluster Type**, selecione **Existing Cluster**. No menu suspenso **Select Cluster**, selecione o cluster criado na seção **criar um cluster Databricks**. Clique em **confirm**.
 
 10. Clique em **run now**.
+Execute o gerador de dados
+
+1. Navegue até o diretório chamado `onprem` no repositório GitHub.
+
+2. Atualize os valores no arquivo **main.env** da seguinte maneira:
+
+```shell
+    RIDE_EVENT_HUB=[Cadeia de conexão para o hub de eventos de corrida de táxi]
+    FARE_EVENT_HUB=[Cadeia de conexão para o hub de eventos de tarifa de táxi]
+    RIDE_DATA_FILE_PATH=/DataFile/FOIL2013
+    MINUTES_TO_LEAD=0
+    PUSH_RIDE_DATA_FIRST=false
+    ```
+    A cadeia de conexão para o hub de eventos de corrida de táxi é o valor **taxi-ride-eh** da seção de saída **eventHubs** na etapa 4 da seção *implantar os recursos do Azure*. A cadeia de conexão para o hub de eventos de tarifa de táxi é o valor **taxi-fare-eh** da seção de saída **eventHubs** na etapa 4 da seção *implantar os recursos do Azure*.
+
+3. Execute o comando a seguir para criar a imagem do Docker.
+
+```bash
+    docker build --no-cache -t dataloader .
+    ```
+
+4. Navegue de volta para o diretório pai.
+
+```bash
+    cd ..
+    ```
+
+5. Execute o comando a seguir para executar a imagem do Docker.
+
+    ```bash
+    docker run -v `pwd`/DataFile:/DataFile --env-file=onprem/main.env dataloader:latest
+    ```
+
+A saída deve ser semelhante à seguinte:
+
+```
+Criados 10.000 registros para TaxiFare
+Criados 10.000 registros para TaxiRide
+Criados 20.000 registros para TaxiFare
+Criados 20.000 registros para TaxiRide
+Criados 30.000 registros para TaxiFare...
+
+```
+
+Para verificar se a tarefa do Databricks está sendo executada corretamente, abra o portal do Azure e navegue até o banco de dados Cosmos DB. Abra a guia **Data Explorer** e examine os dados na tabela **taxi records**.  
+
+[1] <span id="note1">Donovan, Brian; Work, Dan (2016): New York City Taxi Trip Data (2010-2013). Universidade de Illinois em Urbana-Champaign. https://doi.org/10.13012/J8PN93H8
