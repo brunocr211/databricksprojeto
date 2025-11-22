@@ -10,7 +10,7 @@ Para identificar tendências de uso, a empresa de táxi deseja calcular a gorjet
 
 ## Implante a solução
 
-Uma implantação para esta arquitetura de referência está disponível no [GitHub](https://github.com/mspnp/azure-databricks-streaming-analytics).
+Uma implantação para esta arquitetura de referência está disponível no [GitHub](https://github.com/mspnp/azure-databricks-streaming-analytics)
 
 ### Pré-requisitos
 
